@@ -36,11 +36,21 @@ namespace E_Module
 
 	uint32_t EventType::_calculateHashValue(string str) const
 	{
+		// Check for wild card event type.
 		if (str == WILD_CARD_EVENT_TYPE_STRING)
 		{
 			return WILD_CARD_EVENT_TYPE_ID;
 		}
 
+		// DJB hashing which is much faster than Adler-32 checksum introduced in the book.
+		unsigned int hash = 5381;
+		const char* ch_ptr = str.c_str();
 		
+		while (*ch_ptr)
+		{
+			hash += (hash << 5) + (*ch_ptr++);
+		}
+
+		return (hash & 0x7FFFFFFF);
 	}
 }
