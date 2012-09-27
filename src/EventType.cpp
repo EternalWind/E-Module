@@ -1,5 +1,8 @@
 #include "EventType.h"
 
+#include <memory>
+#include <strstream>
+
 namespace E_Module
 {
 	const string EventType::WILD_CARD_EVENT_TYPE_STRING = "wild_card_event";
@@ -22,6 +25,11 @@ namespace E_Module
 	bool EventType::operator == (const EventType& other) const
 	{
 		return mIdentifier == other.mIdentifier;
+	}
+
+	bool EventType::operator != (const EventType& other) const
+	{
+		return mIdentifier != other.mIdentifier;
 	}
 
 	bool EventType::operator < (const EventType& other) const
@@ -52,5 +60,35 @@ namespace E_Module
 		}
 
 		return (hash & 0x7FFFFFFF);
+	}
+
+	void EventType::serialize(OUT IStream& stream) const
+	{
+		stream << (byte4)mIdentifier << (byte4)mOrigString.size();
+		stream.write((const byte*)mOrigString.c_str(), (byte4)mOrigString.size());
+	}
+
+	void EventType::deserialize(IN IStream& stream)
+	{
+		byte4 size = 0;
+		shared_ptr<byte> buffer;
+
+		stream >> (byte4&)mIdentifier >> size;
+
+		buffer.reset(new byte[size]);
+		stream.read(buffer.get(), size);
+
+		mOrigString = string((const char*)buffer.get(), size);
+	}
+
+	string EventType::toString() const
+	{
+		strstream ss;
+		string str;
+
+		ss << "Event type: " << mOrigString << "(" << mIdentifier << ")";
+		ss >> str;
+
+		return str;
 	}
 }

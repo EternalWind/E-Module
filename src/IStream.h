@@ -10,7 +10,7 @@ namespace E_Module
 	/**
 	  * An interface for streams.
 	  */
-	class IStream
+    interface E_MODULE IStream
 	{
 	public:
 		/**
@@ -21,7 +21,7 @@ namespace E_Module
 		  * @param offset The offset used to skip a given number of bytes in the stream.
 		  * @returns The actual number of read bytes.
 		  */
-		virtual unsigned read(out byte* buffer, unsigned buffer_size, int bytes_to_read = -1, unsigned offset = 0) = 0;
+		virtual unsigned read(OUT byte* buffer, unsigned buffer_size, int bytes_to_read = -1, unsigned offset = 0) = 0;
 
 		/**
 		  * Writes data to the stream.
@@ -31,7 +31,19 @@ namespace E_Module
 		  * @param offset The offset used to skip a given number of bytes in the buffer.
 		  * @returns The actual number of written bytes.
 		  */
-		virtual unsigned write(in byte* buffer, unsigned buffer_size, int bytes_to_write = -1, unsigned offset = 0) = 0;
+		virtual unsigned write(const IN byte* buffer, unsigned buffer_size, int bytes_to_write = -1, unsigned offset = 0) = 0;
+
+		virtual IStream& operator << (const IN byte& data) = 0;
+		virtual IStream& operator << (const IN byte2& data) = 0;
+		virtual IStream& operator << (const IN byte4& data) = 0;
+		virtual IStream& operator << (const IN byte8& data) = 0;
+
+		virtual IStream& operator >> (OUT byte& data) = 0;
+		virtual IStream& operator >> (OUT byte2& data) = 0;
+		virtual IStream& operator >> (OUT byte4& data) = 0;
+		virtual IStream& operator >> (OUT byte8& data) = 0;
+
+		virtual ~IStream() = 0 {}
 	};
 }
 

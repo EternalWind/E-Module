@@ -13,26 +13,28 @@ namespace E_Module
 	/**
 	  * An interface for all the serializable classes.
 	  */
-	class ISerializable
+	interface E_MODULE ISerializable
 	{
 	public:
 		/**
 		  * Serializes this object.
 		  * @param stream The output stream.
 		  */
-		virtual void serialize(out IStream& stream) const = 0;
+		virtual void serialize(OUT IStream& stream) const = 0;
 
 		/**
 		  * Deserializes an object from a given stream.
 		  * @param stream The input stream.
 		  */
-		virtual void deserialize(in IStream& stream) = 0;
+		virtual void deserialize(IN IStream& stream) = 0;
 
 		/**
 		  * Converts this object to a string.
 		  * @returns The output string.
 		  */
 		virtual string toString() const = 0;
+
+		virtual ~ISerializable() = 0 {}
 	};
 }
 
